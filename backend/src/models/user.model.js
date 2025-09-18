@@ -27,7 +27,17 @@ const userSchema = new mongoose.Schema(
         },
         refreshToken:{
             type: String,
-        }
+        },
+        favoritePlatforms: [
+            { 
+                type: String,
+                default: ["Codeforces", "LeetCode", "CodeChef", "GeeksforGeeks"], 
+            }
+        ],
+        reminderTimes: {
+                type: [Number], // in minutes, e.g. [60, 120, 1440]
+                default: [120], // default: 2 hrs before
+        },
     },{timestamps: true}
 );
 
