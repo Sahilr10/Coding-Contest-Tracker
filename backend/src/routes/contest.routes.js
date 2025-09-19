@@ -19,9 +19,10 @@ router.route("/gfg").get(getGFGContests);
 router.route("/all").get(getAllContests);
 
 //protected routes
-router.route("/prefrences").get( verifyJWT, getUserPreferences);
-router.route("/prefrences").put(verifyJWT, updateUserPreferences);
-router.route("/reminders").put( verifyJWT, updateUserPreferences);
+router.route("/prefrences")
+    .get( verifyJWT, getUserPreferences)
+    .put(verifyJWT, updateUserPreferences);
+
 
 
 export default router;
