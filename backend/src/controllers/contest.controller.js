@@ -13,28 +13,28 @@ const getCodeforcesContests = asyncHandler(async (req, res) => {
   const contests = await fetchCodeforces();
   return res
     .status(200)
-    .json(new ApiResponse(200, { count: contests.length, contests }, "Codeforces contests"));
+    .json(new ApiResponse(200, "Codeforces contests", { count: contests.length, contests }));
 });
 
 const getLeetCodeContests = asyncHandler(async (req, res) => {
   const contests = generateLeetCode();
   return res
     .status(200)
-    .json(new ApiResponse(200, { count: contests.length, contests }, "LeetCode contests"));
+    .json(new ApiResponse(200, "LeetCode contests",{ count: contests.length, contests }));
 });
 
 const getCodeChefContests = asyncHandler(async (req, res) => {
   const contests = generateCodeChef();
   return res
     .status(200)
-    .json(new ApiResponse(200, { count: contests.length, contests }, "CodeChef contests"));
+    .json(new ApiResponse(200, "CodeChef contests",{ count: contests.length, contests }));
 });
 
 const getGFGContests = asyncHandler(async (req, res) => {
   const contests = generateGFG();
   return res
     .status(200)
-    .json(new ApiResponse(200, { count: contests.length, contests }, "GFG contests"));
+    .json(new ApiResponse(200, "GFG contests",{ count: contests.length, contests }));
 });
 
 const getAllContests = asyncHandler(async (req, res) => {
@@ -56,7 +56,7 @@ const getAllContests = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { count: allContests.length, contests: allContests }, "All contests fetched successfully"));
+    .json(new ApiResponse(200, "All contests fetched successfully", { count: allContests.length, contests: allContests }));
 });
 
 export {
