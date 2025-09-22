@@ -1,5 +1,6 @@
 // src/components/Header.jsx
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 
 const Header = () => {
   const [theme, setTheme] = useState(() => {
@@ -28,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 shadow-md">
+    <header className=" bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo/Brand */}
         <div className="flex items-center space-x-2">
@@ -39,24 +40,13 @@ const Header = () => {
 
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
-          <a 
+          <Link 
             href="/hackathons" 
-            className="text-lg font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            className="text-2xl font-bold text-blue-600 dark:text-blue-400"
           >
             Hackathons & Events
-          </a>
-          <a 
-            href="/contests" 
-            className="text-lg font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-          >
-            All Contests
-          </a>
-          <a 
-            href="/about" 
-            className="text-lg font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-          >
-            About
-          </a>
+          </Link>
+          
         </nav>
 
         {/* Theme Toggle */}
