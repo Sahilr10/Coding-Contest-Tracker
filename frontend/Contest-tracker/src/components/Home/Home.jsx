@@ -13,54 +13,7 @@ const Home = () => {
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Mock data for contests (replace with actual API calls)
-  // const mockContests = [
-  //   {
-  //     id: 1,
-  //     platform: 'LeetCode',
-  //     name: 'Weekly Contest 395',
-  //     startTime: '2024-07-28T08:00:00Z',
-  //     duration: 90,
-  //     status: 'upcoming',
-  //     url: '#'
-  //   },
-  //   {
-  //     id: 2,
-  //     platform: 'CodeChef',
-  //     name: 'Starters 125',
-  //     startTime: '2024-07-31T20:00:00Z',
-  //     duration: 120,
-  //     status: 'upcoming',
-  //     url: '#'
-  //   },
-  //   {
-  //     id: 3,
-  //     platform: 'GeeksforGeeks',
-  //     name: 'Weekly Contest 45',
-  //     startTime: '2024-07-28T19:00:00Z',
-  //     duration: 60,
-  //     status: 'upcoming',
-  //     url: '#'
-  //   },
-  //   {
-  //     id: 4,
-  //     platform: 'Codeforces',
-  //     name: 'Round #895 (Div. 3)',
-  //     startTime: '2024-08-05T17:35:00Z',
-  //     duration: 135,
-  //     status: 'upcoming',
-  //     url: '#'
-  //   },
-  //   {
-  //     id: 5,
-  //     platform: 'LeetCode',
-  //     name: 'Biweekly Contest 128',
-  //     startTime: '2024-08-03T20:00:00Z',
-  //     duration: 90,
-  //     status: 'upcoming',
-  //     url: '#'
-  //   }
-  // ];
+  
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -92,15 +45,17 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 ">
-      {/* Hero Section */}
-      <div className="max-w-screen-xl  mx-auto justify-center">
-        <NextContestSection upcomingContests={contests} />
-      </div>
+    <div className="min-h-screen bg-[#121826]">
+      <div className="max-w-[80vw] mx-auto">
+        <div className=" text-3xl font-bold text-gray-900 dark:text-white pb-8 ">Next Contest</div>
+        {/* Hero Section */}
+        <div className="justify-center">
+          <NextContestSection upcomingContests={contests} />
+        </div>
 
-      {/* Contests Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+        {/* Contests Section */}
+          <section className="py-16">
+        <div className="max-w-[80vw] mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Upcoming Contests
@@ -130,7 +85,7 @@ const Home = () => {
           </div>
 
           {/* Contest Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-4">
             {loading
               ? // Loading skeletons
                 Array.from({ length: 6 }).map((_, index) => (
@@ -144,7 +99,7 @@ const Home = () => {
                     <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
                   </div>
                 ))
-              : contests.map((contest) => {
+              : contests.slice(1, 7).map((contest) => {
                   const platformClass = getPlatformClass(contest.platform);
 
                   return (
@@ -229,9 +184,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-4">
+        {/* Features Section */}
+        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Why Choose Contest Tracker?
@@ -279,18 +234,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-blue-600 dark:bg-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Level Up?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of developers who never miss a coding contest
-          </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-            Get Started Free
-          </button>
-        </div>
-      </section>
+        {/* CTA Section */}
+        {/* <section className="py-20 bg-blue-600 dark:bg-blue-800 text-white">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-6">Ready to Level Up?</h2>
+            <p className="text-xl mb-8 opacity-90">
+              Join thousands of developers who never miss a coding contest
+            </p>
+            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              Get Started Free
+            </button>
+          </div>
+        </section> */}
+      </div>
     </div>
   );
 };

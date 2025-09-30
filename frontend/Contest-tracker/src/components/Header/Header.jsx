@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <header className=" bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 shadow-md">
+    <header className="  bg-[#1f2937] text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo/Brand */}
         <div className="flex items-center space-x-2">
@@ -44,7 +44,7 @@ const Header = () => {
             href="/hackathons" 
             className="text-2xl font-bold text-blue-600 dark:text-blue-400"
           >
-            Hackathons & Events
+            {/* Hackathons & Events */}
           </Link>
           
         </nav>
