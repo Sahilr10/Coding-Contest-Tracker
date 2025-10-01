@@ -53,7 +53,7 @@ const Form = ({ isRegister, formData, handleChange, handleSubmit, onToggleMode, 
                 </svg>
                 <input
                   placeholder="Email"
-                  className="bg-[#171717] rounded-[25px] border-none outline-none w-full px-4 py-2 text-white placeholder-gray-400"
+                  className="bg-[#171717] rounded-[25px] border-none outline-none w-full px-4 py-2 text-white "
                   type="email"
                   name="email"
                   value={formData.email}
@@ -67,7 +67,7 @@ const Form = ({ isRegister, formData, handleChange, handleSubmit, onToggleMode, 
                 </svg>
                 <input
                   placeholder="Password"
-                  className="bg-[#171717] rounded-[25px] border-none outline-none w-full px-4 py-2 text-white placeholder-gray-400"
+                  className="bg-[#171717] rounded-[25px] border-none outline-none w-full px-4 py-2 text-white "
                   type="password"
                   name="password"
                   value={formData.password}

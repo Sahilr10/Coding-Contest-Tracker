@@ -24,7 +24,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/users/login', {
+      const response = await fetch('/api/v1/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,9 +36,6 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Store tokens if needed
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
         navigate('/profile'); // Redirect to profile or home
       } else {
         setError(data.message || 'Login failed');
