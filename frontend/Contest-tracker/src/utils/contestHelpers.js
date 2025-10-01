@@ -3,15 +3,27 @@
 // Platform-specific class
 export const getPlatformClass = (platform) => {
   const platformClasses = {
-    leetcode: "border-l-orange-500",
-    codechef: "border-l-red-500",
-    gfg: "border-l-green-500",
-    codeforces: "border-l-blue-500",
-    atcoder: "border-l-purple-500",
+    LeetCode: "border-l-orange-400",
+    CodeChef: "border-l-red-400",
+    GeeksforGeeks: "border-l-green-400",
+    Codeforces: "border-l-blue-400",
+    AtCoder: "border-l-purple-400",
   };
 
-  const platformKey = platform?.toLowerCase();
-  return platformClasses[platformKey] || "border-l-blue-500";
+  return platformClasses[platform] || "border-l-blue-500";
+};
+
+// Platform dot color class for better visibility
+export const getPlatformDotClass = (platform) => {
+  const platformDotClasses = {
+    LeetCode: "bg-orange-600",
+    CodeChef: "bg-red-600",
+    GeeksforGeeks: "bg-green-600",
+    Codeforces: "bg-blue-600",
+    AtCoder: "bg-purple-600",
+  };
+
+  return platformDotClasses[platform] || "bg-blue-600";
 };
 
 // Countdown with details

@@ -94,7 +94,7 @@ export const generateGFG = () => {
       startTime: contestDate,
       endTime: new Date(contestDate.getTime() + 150 * 60000),
       duration: 150,
-      url: "https://practice.geeksforgeeks.org/contest/gfg-weekly-coding-contest",
+      url: "https://www.geeksforgeeks.org/events/rec/gfg-weekly-coding-contest",
     });
   }
 
