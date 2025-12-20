@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Form from '../Form/Form';
+import Form from '../components/Form.jsx';
 
-function Login() {
+function Register() {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: ''
   });
@@ -24,21 +25,20 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/v1/users/login', {
+      const response = await fetch('/api/v1/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/profile'); // Redirect to profile or home
+        navigate('/login'); // Redirect to login after successful registration
       } else {
-        setError(data.message || 'Login failed');
+        setError(data.message || 'Registration failed');
       }
     } catch (err) {
       setError('Network error. Please try again.');
@@ -49,11 +49,11 @@ function Login() {
 
   return (
     <Form
-      isRegister={false}
+      isRegister={true}
       formData={formData}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
-      onToggleMode={() => navigate('/register')}
+      onToggleMode={() => navigate('/login')}
       onForgotPassword={() => {}}
       error={error}
       loading={loading}
@@ -61,4 +61,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

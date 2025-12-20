@@ -1,7 +1,7 @@
 // src/utils/reminders.utils.js
 import cron from "node-cron";
 import nodemailer from "nodemailer";
-import { fetchCodeforces, generateLeetCode, generateCodeChef, generateGFG } from "../services/contest.service.js";
+import { fetchCodeforces, fetchLeetCode, generateCodeChef, generateGFG } from "../services/contest.service.js";
 import { User } from "../models/user.model.js";
 
 // Configure mail transporter
@@ -23,7 +23,7 @@ export function startReminders() {
     // ✅ Fetch contests once per job
     let contests = [
       ...(await fetchCodeforces()),
-      ...generateLeetCode(),
+      ...(await fetchLeetCode()),
       ...generateCodeChef(),
       ...generateGFG(),
     ];

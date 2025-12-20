@@ -1,16 +1,28 @@
 // src/utils/contestHelpers.js
 
 // Platform-specific class
-export const getPlatformClass = (platform) => {
-  const platformClasses = {
-    LeetCode: "border-l-orange-400",
-    CodeChef: "border-l-red-400",
-    GeeksforGeeks: "border-l-green-400",
-    Codeforces: "border-l-blue-400",
-    AtCoder: "border-l-purple-400",
+export const getPlatformGradient = (platform) => {
+  const gradients = {
+    LeetCode: "from-orange-600/20 via-orange-500/10 to-transparent",
+    CodeChef: "from-red-600/20 via-red-500/10 to-transparent",
+    GeeksforGeeks: "from-green-600/20 via-green-500/10 to-transparent",
+    Codeforces: "from-blue-600/20 via-blue-500/10 to-transparent",
+    AtCoder: "from-purple-600/20 via-purple-500/10 to-transparent",
   };
 
-  return platformClasses[platform] || "border-l-blue-500";
+  return gradients[platform] || "from-blue-600/20 via-blue-500/10 to-transparent";
+};
+
+export const getPlatformBorderClass = (platform) => {
+  const borderClasses = {
+    LeetCode: "border-orange-500/40",
+    CodeChef: "border-red-500/40",
+    GeeksforGeeks: "border-green-500/40",
+    Codeforces: "border-blue-500/40",
+    AtCoder: "border-purple-500/40",
+  };
+
+  return borderClasses[platform] || "border-blue-500/40";
 };
 
 // Platform dot color class for better visibility
@@ -54,6 +66,33 @@ export const formatTime = (dateString) => {
     minute: "2-digit",
   });
 };
+
+export const formatDate = (startTime) => {
+  if (!startTime) return "";
+
+  const date = new Date(startTime);
+  if (isNaN(date.getTime())) return "";
+
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+
+export const formatClockTime = (dateString) => {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  if (isNaN(date)) return "";
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
 
 export const getTimeUntil = (dateString) => {
     const now = new Date();

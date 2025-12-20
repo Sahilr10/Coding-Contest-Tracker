@@ -15,33 +15,51 @@ export const fetchCodeforces = async () => {
     }));
 };
 
-// LeetCode
-export const generateLeetCode = () => {
-  const contests = [];
-  const now = new Date();
-  const currentDay = now.getDay();
+//LeetCode
+export const fetchLeetCode = async () => {
+  const response = await axios.get(
+    "https://alfa-leetcode-api.onrender.com/contests"
+  );
 
-  // Weekly
-  let daysUntilSunday = (7 - currentDay) % 7;
-  let nextSunday = new Date(now);
-  nextSunday.setDate(now.getDate() + daysUntilSunday);
-  nextSunday.setUTCHours(8, 0, 0, 0);
-
-  for (let i = 0; i < 6; i++) {
-    const contestDate = new Date(nextSunday);
-    contestDate.setDate(contestDate.getDate() + i * 7);
-    contests.push({
-      name: `LeetCode Weekly Contest ${400 + i}`,
+  return response.data.allContests
+    .filter(c => c.originStartTime  * 1000 > Date.now())
+    .map(c => ({
+      name: c.title,
       platform: "LeetCode",
-      startTime: contestDate,
-      endTime: new Date(contestDate.getTime() + 90 * 60000),
-      duration: 90,
-      url: "https://leetcode.com/contest/",
-    });
-  }
-
-  return contests;
+      startTime: new Date(c.startTime * 1000),
+      endTime: new Date((c.startTime + c.duration) * 1000),
+      duration: Math.floor(c.duration / 60),
+      url: `https://leetcode.com/contest/${c.titleSlug}`,
+    }));
 };
+
+// LeetCode
+// export const generateLeetCode = () => {
+//   const contests = [];
+//   const now = new Date();
+//   const currentDay = now.getDay();
+
+//   // Weekly
+//   let daysUntilSunday = (7 - currentDay) % 7;
+//   let nextSunday = new Date(now);
+//   nextSunday.setDate(now.getDate() + daysUntilSunday);
+//   nextSunday.setUTCHours(8, 0, 0, 0);
+
+//   for (let i = 0; i < 6; i++) {
+//     const contestDate = new Date(nextSunday);
+//     contestDate.setDate(contestDate.getDate() + i * 7);
+//     contests.push({
+//       name: `LeetCode Weekly Contest ${400 + i}`,
+//       platform: "LeetCode",
+//       startTime: contestDate,
+//       endTime: new Date(contestDate.getTime() + 90 * 60000),
+//       duration: 90,
+//       url: "https://leetcode.com/contest/",
+//     });
+//   }
+
+//   return contests;
+// };
 
 // CodeChef
 export const generateCodeChef = () => {

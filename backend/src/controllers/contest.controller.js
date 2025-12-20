@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 
 import {
   fetchCodeforces,
-  generateLeetCode,
+  fetchLeetCode,
   generateCodeChef,
   generateGFG,
 } from "../services/contest.service.js";
@@ -40,7 +40,7 @@ const getGFGContests = asyncHandler(async (req, res) => {
 const getAllContests = asyncHandler(async (req, res) => {
   let allContests = [
     ...(await fetchCodeforces()),
-    ...generateLeetCode(),
+    ...(await fetchLeetCode()),
     ...generateCodeChef(),
     ...generateGFG(),
   ];
