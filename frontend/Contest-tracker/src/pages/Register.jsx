@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Form from '../components/Form.jsx';
+import LoginForm from '../components/LoginForm.jsx';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ function Register() {
   };
 
   return (
-    <Form
+    <Login
       isRegister={true}
       formData={formData}
       handleChange={handleChange}

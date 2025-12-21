@@ -1,5 +1,6 @@
 import { Trophy } from 'lucide-react'
 import avatar from './../assets/avatar.svg'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -15,9 +16,12 @@ const Header = () => {
         </div>
 
         {/* right profile */}
-       <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/20 transition-all duration-300 ease-in-out hover:border-purple-500 border-transition cursor-pointer">
+        <Link to="/profile" >
+       <div 
+       className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/20 transition-all duration-300 ease-in-out hover:border-purple-500 border-transition cursor-pointer ">
           <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" />
         </div>
+        </Link>
     </div>
     </nav>
   )

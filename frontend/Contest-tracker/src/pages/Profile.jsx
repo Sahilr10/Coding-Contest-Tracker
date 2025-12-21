@@ -1,70 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { X } from "lucide-react";
+import UserDetails from "../components/UserDetails";
+import Loader from "../components/Loader.jsx";
+import axios from "axios";
+import ProfileTabs from "../components/ProfileTabs.jsx";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "/api/v1";
 
 function Profile() {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('/api/v1/users/me', {
-          method: 'GET',
-          credentials: 'include',
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.data);
-        } else {
-          setError('User not logged in');
-        }
+        const response = await axios.get("/users/me");
+        setUser(response.data.data); //  user stored here
       } catch (err) {
-        setError('Network error. Please try again.');
+        setError("User not logged in");
+      } finally {
+        setLoading(false); //  important
       }
     };
+
     fetchUser();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('/api/v1/users/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-      if (response.ok) {
-        navigate('/login');
-      } else {
-        setError('Logout failed');
-      }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    }
-  };
-
-  if (error) {
-    return <div className="p-4 text-red-600">{error}</div>;
-  }
-
-  if (!user) {
-    return <div className="p-4">Loading user data...</div>;
-  }
+  // Guard rendering
+  if (loading) return <Loader />;
+  if (!user) return <Navigate to="/login" replace />;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Profile</h2>
-      <div className="mb-2">
-        <span className="font-semibold">Username:</span> {user.username}
+    <div className="max-w-[80vw] mx-auto min-h-screen no-scrollbar">
+      <div className="flex justify-between text-3xl text-white mb-5 pt-8">
+        Profile
+        <button
+          className="hover:bg-white/20 p-2 rounded-full transition"
+          onClick={() => navigate(-1)}
+        >
+          <X />
+        </button>
       </div>
-      <div className="mb-4">
-        <span className="font-semibold">Email:</span> {user.email}
+      <div>
+      <UserDetails user={user} />
       </div>
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-      >
-        Logout
-      </button>
+
+      <div className="my-5  ">
+        <ProfileTabs user={user}/>
+      </div>
+
+      
+
     </div>
   );
 }
