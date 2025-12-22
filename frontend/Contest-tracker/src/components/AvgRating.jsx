@@ -1,10 +1,10 @@
-import { Trophy } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 
-const TotalContests = ({ user }) => {
-  const [count, setCount] = useState(0);
+const AvgRating = ({ user }) => {
+  const [rating, setRating] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -14,64 +14,61 @@ const TotalContests = ({ user }) => {
       return;
     }
 
-    const fetchTotalContests = async () => {
+    const fetchAvgRating = async () => {
       try {
         const res = await axios.get(
-          "/users/total-contests",
+          "/users/average-rating",
           {
             params: {
               codeforces: user.connectedAccounts?.codeforces?.username,
               leetcode: user.connectedAccounts?.leetcode?.username,
             },
-            withCredentials: true, // 🔑 needed for JWT cookie
+            withCredentials: true,
           }
         );
 
         if (res.data?.success) {
-          setCount(res.data.total);
+          setRating(res.data.averageRating);
         } else {
           setError(true);
         }
       } catch (err) {
-        console.error("Error fetching total contests:", err);
+        console.error("Avg rating fetch error:", err);
         setError(true);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTotalContests();
+    fetchAvgRating();
   }, [user]);
 
-  // 🔄 Loading state
   if (loading) {
-    return <StatsCard label="Total Contests" loading />;
+    return <StatsCard label="Avg Rating" loading />;
   }
 
-  // ❌ Error state
   if (error) {
     return (
       <StatsCard
-        icon={<Trophy size={28} />}
+        icon={<TrendingUp size={28} />}
         value="—"
-        label="Total Contests"
+        label="Avg Rating"
         border="border-red-500/40"
         gradient="from-red-600/40 via-red-500/20 to-transparent"
       />
     );
   }
 
-  // ✅ Success
   return (
     <StatsCard
-      icon={<Trophy size={28} />}
-      iconColor="text-purple-500"
-      value={count}
-      label="Total Contests"
-      gradient="from-purple-600/40 via-purple-500/20 to-transparent"
-      border="border-purple-500/40"
+      icon={<TrendingUp size={28} />}
+      iconColor="text-blue-500"
+      value={rating}
+      label="Avg Rating"
+      gradient="from-blue-600/40 via-blue-500/20 to-transparent"
+      border="border-blue-500/40"
     />
   );
 };
 
-export default TotalContests;
+export default AvgRating;

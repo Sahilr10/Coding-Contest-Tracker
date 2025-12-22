@@ -2,6 +2,40 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
+
+
+const connectedAccountSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      trim: true,
+    },
+
+    connected: {
+      type: Boolean,
+      default: false,
+    },
+
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+
+    lastSyncedAt: {
+      type: Date,
+    },
+
+    metadata: {
+      type: mongoose.Schema.Types.Mixed, // ratings, ranks, etc.
+      default: {},
+    },
+  },
+  { _id: false }
+);
+
+
+
+
 const userSchema = new mongoose.Schema(
     {
         username: { 
@@ -27,6 +61,12 @@ const userSchema = new mongoose.Schema(
         },
         refreshToken:{
             type: String,
+        },
+        connectedAccounts: {
+            codeforces: connectedAccountSchema,
+            leetcode: connectedAccountSchema,
+            codechef: connectedAccountSchema,
+            geeksforgeeks: connectedAccountSchema,
         },
         favoritePlatforms: [
             { 

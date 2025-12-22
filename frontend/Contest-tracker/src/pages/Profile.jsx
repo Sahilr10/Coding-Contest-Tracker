@@ -52,7 +52,7 @@ function Profile() {
       </div>
 
       <div className="my-5  ">
-        <ProfileTabs user={user}/>
+        <ProfileTabs user={user} />
       </div>
 
       
