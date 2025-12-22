@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Overview from "./Overview";
 import ConnectedAccounts from "./ConnectedAccounts";
+import ContestStats from "./ContestStats";
+import Analytics from "./Analytics";
 
 const tabs = [
   "Overview",
   "Connected Accounts",
   "Contest Stats",
   "Analytics",
-  "Goals & Streaks",
   "Notifications",
   "Settings",
 ];
@@ -40,6 +41,14 @@ const ProfileTabs = ({ user, fetchUser }) => {
 
       {activeTab === "Connected Accounts" && (
         <ConnectedAccounts user={user} fetchUser={fetchUser} />
+      )}
+
+      {activeTab === "Contest Stats" && (
+        <ContestStats user={user} fetchUser={fetchUser} />
+      )}
+
+      {activeTab === "Analytics" && (
+        <Analytics user={user} fetchUser={fetchUser} />
       )}
     </>
   );

@@ -1,4 +1,13 @@
-const StatsCard = ({ icon,iconColor, value, label, gradient, border }) => {
+const StatsCard = ({
+  icon,
+  iconColor,
+  value,
+  label,
+  gradient,
+  border,
+  loading = false,
+  loader = null
+}) => {
   return (
     <div
       className={`
@@ -10,12 +19,15 @@ const StatsCard = ({ icon,iconColor, value, label, gradient, border }) => {
         shadow-xl
       `}
     >
-      <div className={`${iconColor}`}>{icon}</div>
+      {/* Icon */}
+      <div className={iconColor}>{icon}</div>
 
+      {/* Value / Loader */}
       <div>
-        <div className="text-4xl font-medium text-white">
-          {value}
+        <div className="text-4xl font-medium text-white min-h-[40px] flex items-center">
+          {loading ? loader : value}
         </div>
+
         <div className="text-white/70 mt-2">
           {label}
         </div>

@@ -250,10 +250,346 @@ const getBadgesEarned = async (req, res) => {
   }
 };
 
+const getWinRate = async (req, res) => {
+  try {
+    const { codeforces, leetcode } = req.query;
+
+    let wins = 0;
+    let total = 0;
+
+    /* CODEFORCES */
+    if (codeforces) {
+      const cfRes = await axios.get(
+        `https://codeforces.com/api/user.rating?handle=${codeforces}`
+      );
+
+      if (cfRes.data.status === "OK") {
+        cfRes.data.result.forEach((contest) => {
+          total++;
+          if (contest.newRating > contest.oldRating) {
+            wins++;
+          }
+        });
+      }
+    }
+
+    /*  LEETCODE */
+    if (leetcode) {
+      const lcRes = await axios.get(
+        `https://alfa-leetcode-api.onrender.com/${leetcode}/contest`
+      );
+
+      const contests = lcRes.data?.contestParticipation || [];
+
+      contests.forEach((contest) => {
+        total++;
+        if (
+          contest.contestTopPercentage !== undefined &&
+          contest.contestTopPercentage <= 25
+        ) {
+          wins++;
+        }
+      });
+    }
+
+    const winRate =
+      total === 0 ? 0 : Number(((wins / total) * 100).toFixed(1));
+
+    return res.json({
+      success: true,
+      winRate,
+      wins,
+      totalContests: total,
+    });
+  } catch (error) {
+    console.error("Win rate error:", error.message);
+    res.status(500).json({ success: false });
+  }
+};
+
+const getAvgRankChange = async (req, res) => {
+  try {
+    const { codeforces, leetcode } = req.query;
+
+    let totalChange = 0;
+    let count = 0;
+
+    /* =======================
+       CODEFORCES
+    ======================= */
+    if (codeforces) {
+      const cfRes = await axios.get(
+        `https://codeforces.com/api/user.rating?handle=${codeforces}`
+      );
+
+      if (cfRes.data.status === "OK") {
+        const ratings = cfRes.data.result;
+
+        for (let i = 1; i < ratings.length; i++) {
+          const diff =
+            ratings[i].newRating - ratings[i].oldRating;
+
+          totalChange += diff;
+          count++;
+        }
+      }
+    }
+
+    /* =======================
+       LEETCODE
+    ======================= */
+    if (leetcode) {
+      const lcRes = await axios.get(
+        `https://alfa-leetcode-api.onrender.com/${leetcode}/contest`
+      );
+
+      const contests = lcRes.data?.contestParticipation || [];
+
+      for (let i = 1; i < contests.length; i++) {
+        const prev = contests[i - 1]?.ranking;
+        const curr = contests[i]?.ranking;
+
+        if (prev && curr) {
+          totalChange += prev - curr;
+          count++;
+        }
+      }
+    }
+
+    
+    const avgRankChange =
+      count === 0 ? 0 : Math.round(totalChange / count);
+
+    return res.json({
+      success: true,
+      averageRankChange: avgRankChange,
+    });
+  } catch (error) {
+    console.error("Avg rank change error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to calculate avg rank change",
+    });
+  }
+};
+
+const getBestPerformance = async (req, res) => {
+  try {
+    const { codeforces, leetcode } = req.query;
+
+    let bestPercentile = null;
+
+    // 🔵 Codeforces
+    if (codeforces) {
+      const ratingRes = await axios.get(
+        `https://codeforces.com/api/user.rating?handle=${codeforces}`
+      );
+
+      if (ratingRes.data.status === "OK") {
+        ratingRes.data.result.forEach(contest => {
+          if (contest.rank && contest.totalParticipants) {
+            const percentile =
+              (contest.rank / contest.totalParticipants) * 100;
+
+            if (
+              bestPercentile === null ||
+              percentile < bestPercentile
+            ) {
+              bestPercentile = percentile;
+            }
+          }
+        });
+      }
+    }
+
+    // 🟠 LeetCode
+    if (leetcode) {
+      const lcRes = await axios.get(
+        `https://alfa-leetcode-api.onrender.com/${leetcode}/contest`
+      );
+
+      if (lcRes.data?.contestTopPercentage !== undefined) {
+        const lcPercent = lcRes.data.contestTopPercentage * 100;
+
+        if (
+          bestPercentile === null ||
+          lcPercent < bestPercentile
+        ) {
+          bestPercentile = lcPercent;
+        }
+      }
+    }
+
+    if (bestPercentile === null) {
+      return res.json({
+        success: true,
+        bestPerformance: null,
+      });
+    }
+
+    res.json({
+      success: true,
+      bestPerformance: Number(bestPercentile.toFixed(1)),
+    });
+  } catch (error) {
+    console.error("Best performance error:", error.message);
+    res.status(500).json({ success: false });
+  }
+};
+
+const getPlatformWiseTable = async (req, res) => {
+  try {
+    const { codeforces, leetcode } = req.query;
+    const table = [];
+
+    /* =====================
+       CODEFORCES
+       ===================== */
+    if (codeforces) {
+      const cfRes = await axios.get(
+        `https://codeforces.com/api/user.rating?handle=${codeforces}`
+      );
+
+      if (cfRes.data.status === "OK") {
+        const contests = cfRes.data.result;
+
+        table.push({
+          platform: "Codeforces",
+          contests: contests.length,
+          avgRank: null,      //  not available
+          bestRank: null      //  not available
+        });
+      }
+    }
+
+    /* =====================
+       LEETCODE
+       ===================== */
+    if (leetcode) {
+      const lcRes = await axios.get(
+        `https://alfa-leetcode-api.onrender.com/${leetcode}/contest`
+      );
+
+      const contests = lcRes.data?.contestParticipation || [];
+
+      let rankSum = 0;
+      let rankCount = 0;
+      let bestRank = Infinity;
+
+      contests.forEach(c => {
+        if (typeof c.ranking === "number") {
+          rankSum += c.ranking;
+          rankCount++;
+          bestRank = Math.min(bestRank, c.ranking);
+        }
+      });
+
+      table.push({
+        platform: "LeetCode",
+        contests: contests.length,
+        avgRank: rankCount === 0 ? 0 : Math.round(rankSum / rankCount),
+        bestRank: bestRank === Infinity ? 0 : bestRank
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: table
+    });
+
+  } catch (error) {
+    console.error("Platform table error:", error.message);
+    return res.status(500).json({ success: false });
+  }
+};
+
+const getRatingProgress = async (req, res) => {
+  try {
+    const { codeforces, leetcode } = req.query;
+
+    let points = [];
+
+    /* =====================
+       CODEFORCES
+    ===================== */
+    if (codeforces) {
+      const cfRes = await axios.get(
+        `https://codeforces.com/api/user.rating?handle=${codeforces}`
+      );
+
+      if (cfRes.data.status === "OK") {
+        cfRes.data.result.forEach((c) => {
+          points.push({
+            timestamp: c.ratingUpdateTimeSeconds * 1000,
+            rating: c.newRating,
+            platform: "Codeforces"
+          });
+        });
+      }
+    }
+
+    /* =====================
+       LEETCODE
+    ===================== */
+    if (leetcode) {
+      const lcRes = await axios.get(
+        `https://alfa-leetcode-api.onrender.com/${leetcode}/contest`
+      );
+
+      const contests = lcRes.data?.contestParticipation || [];
+
+      contests.forEach((c) => {
+        if (c.rating && c.contest?.startTime) {
+          points.push({
+            timestamp: c.contest.startTime * 1000,
+            rating: Math.round(c.rating),
+            platform: "LeetCode"
+          });
+        }
+      });
+    }
+
+    /* =====================
+       SORT CHRONOLOGICALLY
+    ===================== */
+    points.sort((a, b) => a.timestamp - b.timestamp);
+
+    /* =====================
+       FORMAT FOR FRONTEND
+    ===================== */
+    const formatted = points.map((p) => ({
+      label: new Date(p.timestamp).toLocaleString("default", {
+        month: "short",
+        year: "numeric"
+      }),
+      rating: p.rating
+    }));
+
+    return res.json({
+      success: true,
+      data: formatted
+    });
+
+  } catch (error) {
+    console.error("Rating progress error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch rating progress"
+    });
+  }
+};
+
+
+
 export {
   connectAccount,
   getTotalContests,
   getAvgRating,
   getProblemsSolved,
-  getBadgesEarned
+  getBadgesEarned,
+  getWinRate,
+  getAvgRankChange,
+  getBestPerformance,
+  getPlatformWiseTable,
+  getRatingProgress
 }

@@ -2,6 +2,7 @@ import { Trophy } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
+import LoadingIndicatior from "./LoadingIndicatior";
 
 const TotalContests = ({ user }) => {
   const [count, setCount] = useState(0);
@@ -45,7 +46,7 @@ const TotalContests = ({ user }) => {
 
   // 🔄 Loading state
   if (loading) {
-    return <StatsCard label="Total Contests" loading />;
+    return <StatsCard label="Total Contests" loading loader={<LoadingIndicatior/>} />;
   }
 
   // ❌ Error state

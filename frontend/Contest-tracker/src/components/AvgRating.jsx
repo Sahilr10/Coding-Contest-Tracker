@@ -2,6 +2,7 @@ import { TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
+import LoadingIndicatior from "./LoadingIndicatior";
 
 const AvgRating = ({ user }) => {
   const [rating, setRating] = useState(null);
@@ -44,7 +45,7 @@ const AvgRating = ({ user }) => {
   }, [user]);
 
   if (loading) {
-    return <StatsCard label="Avg Rating" loading />;
+    return <StatsCard label="Avg Rating" loading loader={<LoadingIndicatior/>} />;
   }
 
   if (error) {

@@ -2,6 +2,7 @@ import { Award } from "lucide-react";
 import { useEffect, useState } from "react";
 import StatsCard from "./StatsCard";
 import axios from "axios";
+import LoadingIndicatior from "./LoadingIndicatior";
 
 const BadgesEarned = ({ user }) => {
   const [count, setCount] = useState(0);
@@ -33,7 +34,7 @@ const BadgesEarned = ({ user }) => {
   }, [user]);
 
   if (loading) {
-    return <StatsCard label="Badges Earned" loading />;
+    return <StatsCard label="Badges Earned" loading loader={<LoadingIndicatior/>} />;
   }
 
   return (

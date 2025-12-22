@@ -2,6 +2,7 @@ import { Target } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
+import LoadingIndicatior from "./LoadingIndicatior";
 
 const ProblemsSolved = ({ user }) => {
   const [count, setCount] = useState(null);
@@ -38,7 +39,7 @@ const ProblemsSolved = ({ user }) => {
   }, [user]);
 
   if (loading) {
-    return <StatsCard label="Problems Solved" loading />;
+    return <StatsCard label="Problems Solved" loading loader={<LoadingIndicatior/>} />;
   }
 
   return (
