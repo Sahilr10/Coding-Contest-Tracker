@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, loginUser, logoutUser, refreshAccessToken, getCurrentUser } from "../controllers/user.controller.js";
+import { registerUser, loginUser, logoutUser, refreshAccessToken, getCurrentUser, changeCurrentPassword } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { connectAccount, getAvgRankChange, getAvgRating, getBadgesEarned, getBestPerformance, getPlatformWiseTable, getProblemsSolved, getRatingProgress, getTotalContests, getWinRate } from "../controllers/platform.controller.js";
 
@@ -11,6 +11,7 @@ router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 
 //secured routes
+router.route("/change-password").patch(verifyJWT,changeCurrentPassword)
 router.route("/logout").post(verifyJWT, logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/me").get(verifyJWT, getCurrentUser)

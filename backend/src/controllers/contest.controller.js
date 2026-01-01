@@ -10,17 +10,31 @@ import {
 } from "../services/contest.service.js";
 
 const getCodeforcesContests = asyncHandler(async (req, res) => {
-  const contests = await fetchCodeforces();
-  return res
-    .status(200)
-    .json(new ApiResponse(200, "Codeforces contests", { count: contests.length, contests }));
+  try {
+    const contests = await fetchCodeforces();
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Codeforces contests", { count: contests.length, contests }));
+  } catch (error) {
+    console.error("Error fetching Codeforces contests:", error.message);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, "Error fetching Codeforces contests", { error: error.message }));
+  }
 });
 
 const getLeetCodeContests = asyncHandler(async (req, res) => {
-  const contests = generateLeetCode();
-  return res
-    .status(200)
-    .json(new ApiResponse(200, "LeetCode contests",{ count: contests.length, contests }));
+  try {
+    const contests = await fetchLeetCode();
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "LeetCode contests", { count: contests.length, contests }));
+  } catch (error) {
+    console.error("Error fetching LeetCode contests:", error.message);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, "Error fetching LeetCode contests", { error: error.message }));
+  }
 });
 
 const getCodeChefContests = asyncHandler(async (req, res) => {
@@ -38,25 +52,41 @@ const getGFGContests = asyncHandler(async (req, res) => {
 });
 
 const getAllContests = asyncHandler(async (req, res) => {
-  let allContests = [
-    ...(await fetchCodeforces()),
-    ...(await fetchLeetCode()),
-    ...generateCodeChef(),
-    ...generateGFG(),
-  ];
+  try {
+    // Fetch external APIs sequentially with delays to avoid rate limiting
+    const codeforcesContests = await fetchCodeforces();
+    
+    // Add delay between API calls
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const leetcodeContests = await fetchLeetCode();
 
-  // Personalized filter
-  if (req.query.personalized === "true" && req.user) {
-    const user = await User.findById(req.user._id).select("favoritePlatforms");
-    allContests = allContests.filter(c => user.favoritePlatforms.includes(c.platform));
+    let allContests = [
+      ...codeforcesContests,
+      ...leetcodeContests,
+      ...generateCodeChef(),
+      ...generateGFG(),
+    ];
+
+    // Personalized filter
+    if (req.query.personalized === "true" && req.user) {
+      const user = await User.findById(req.user._id).select("favoritePlatforms");
+      allContests = allContests.filter(c => user.favoritePlatforms.includes(c.platform));
+    }
+
+    // Sort
+    allContests.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "All contests fetched successfully", { count: allContests.length, contests: allContests }));
+  } catch (error) {
+    // Return cached or partial data if APIs fail
+    console.error("Error fetching all contests:", error.message);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, "Error fetching contests", { error: error.message }));
   }
-
-  // Sort
-  allContests.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, "All contests fetched successfully", { count: allContests.length, contests: allContests }));
 });
 
 export {

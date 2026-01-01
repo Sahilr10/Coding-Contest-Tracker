@@ -5,6 +5,7 @@ import UserDetails from "../components/UserDetails";
 import Loader from "../components/Loader.jsx";
 import axios from "axios";
 import ProfileTabs from "../components/ProfileTabs.jsx";
+import Home from "./Home.jsx"
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "/api/v1";
@@ -42,7 +43,7 @@ function Profile() {
         Profile
         <button
           className="hover:bg-white/20 p-2 rounded-full transition"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
         >
           <X />
         </button>

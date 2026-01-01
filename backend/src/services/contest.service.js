@@ -1,9 +1,61 @@
 import axios from "axios";
 
+// Cache for contest data
+const cache = {
+  codeforces: { data: null, timestamp: 0 },
+  leetcode: { data: null, timestamp: 0 },
+};
+
+// Cache expiry time in milliseconds (5 minutes)
+const CACHE_EXPIRY = 5 * 60 * 1000;
+
+// Retry configuration
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  initialDelay: 1000, // 1 second
+  maxDelay: 10000, // 10 seconds
+};
+
+// Helper function for exponential backoff retry
+const retryWithBackoff = async (fn, retries = RETRY_CONFIG.maxRetries, delay = RETRY_CONFIG.initialDelay) => {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries === 0 || error.response?.status !== 429) {
+      throw error;
+    }
+
+    // Wait before retrying with exponential backoff
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    // Recursively retry with doubled delay
+    const nextDelay = Math.min(delay * 2, RETRY_CONFIG.maxDelay);
+    return retryWithBackoff(fn, retries - 1, nextDelay);
+  }
+};
+
+// Helper function to check if cache is still valid
+const isCacheValid = (cacheKey) => {
+  return cache[cacheKey].data && (Date.now() - cache[cacheKey].timestamp < CACHE_EXPIRY);
+};
+
 // Codeforces
 export const fetchCodeforces = async () => {
-  const response = await axios.get("https://codeforces.com/api/contest.list");
-  return response.data.result
+  // Return cached data if valid
+  if (isCacheValid('codeforces')) {
+    return cache.codeforces.data;
+  }
+
+  const response = await retryWithBackoff(async () => {
+    return await axios.get("https://codeforces.com/api/contest.list", {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'ContestTracker/1.0'
+      }
+    });
+  });
+
+  const contests = response.data.result
     .filter(c => c.phase === "BEFORE")
     .map(c => ({
       name: c.name,
@@ -13,16 +65,33 @@ export const fetchCodeforces = async () => {
       duration: Math.floor(c.durationSeconds / 60),
       url: `https://codeforces.com/contest/${c.id}`,
     }));
+
+  // Cache the results
+  cache.codeforces = { data: contests, timestamp: Date.now() };
+  return contests;
 };
 
 //LeetCode
 export const fetchLeetCode = async () => {
-  const response = await axios.get(
-    "https://alfa-leetcode-api.onrender.com/contests"
-  );
+  // Return cached data if valid
+  if (isCacheValid('leetcode')) {
+    return cache.leetcode.data;
+  }
 
-  return response.data.allContests
-    .filter(c => c.originStartTime  * 1000 > Date.now())
+  const response = await retryWithBackoff(async () => {
+    return await axios.get(
+      "https://alfa-leetcode-api.onrender.com/contests",
+      {
+        timeout: 10000,
+        headers: {
+          'User-Agent': 'ContestTracker/1.0'
+        }
+      }
+    );
+  });
+
+  const contests = response.data.allContests
+    .filter(c => c.originStartTime * 1000 > Date.now())
     .map(c => ({
       name: c.title,
       platform: "LeetCode",
@@ -31,6 +100,10 @@ export const fetchLeetCode = async () => {
       duration: Math.floor(c.duration / 60),
       url: `https://leetcode.com/contest/${c.titleSlug}`,
     }));
+
+  // Cache the results
+  cache.leetcode = { data: contests, timestamp: Date.now() };
+  return contests;
 };
 
 // LeetCode

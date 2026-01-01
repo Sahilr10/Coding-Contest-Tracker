@@ -3,6 +3,8 @@ import Overview from "./Overview";
 import ConnectedAccounts from "./ConnectedAccounts";
 import ContestStats from "./ContestStats";
 import Analytics from "./Analytics";
+import Notifications from "./Notifications";
+import Settings from "./Settings";
 
 const tabs = [
   "Overview",
@@ -49,6 +51,14 @@ const ProfileTabs = ({ user, fetchUser }) => {
 
       {activeTab === "Analytics" && (
         <Analytics user={user} fetchUser={fetchUser} />
+      )}
+
+      {activeTab === "Notifications" && (
+        <Notifications user={user} fetchUser={fetchUser} />
+      )}
+
+      {activeTab === "Settings" && (
+        <Settings user={user} fetchUser={fetchUser} />
       )}
     </>
   );
