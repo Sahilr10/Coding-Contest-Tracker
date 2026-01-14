@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext";
+import { demoRatingProgress, demoStats } from "../demo/demoData";
 
 const AvgRankChange = ({ user }) => {
+  const { isDemo } = useDemo();
   const [avgChange, setAvgChange] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    if (isDemo) {
+      setAvgChange(demoStats.averageRating - demoRatingProgress[0].rating);
+      setLoading(false);
+      return;
+    }
+
     if (!user) return;
 
     const fetchAvgRankChange = async () => {
@@ -38,7 +48,7 @@ const AvgRankChange = ({ user }) => {
     };
 
     fetchAvgRankChange();
-  }, [user]);
+  }, [isDemo,user]);
 
   const isPositive = avgChange >= 0;
 

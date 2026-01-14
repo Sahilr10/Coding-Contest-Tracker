@@ -3,13 +3,24 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext.jsx";
+import { demoStats } from "../demo/demoData.js";
+
 
 const TotalContests = ({ user }) => {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { isDemo } = useDemo();
 
   useEffect(() => {
+
+    if (isDemo) {
+    setCount(demoStats.totalContests);
+    setLoading(false);
+    return;
+  }
+
     if (!user?.connectedAccounts) {
       setLoading(false);
       return;
@@ -42,7 +53,7 @@ const TotalContests = ({ user }) => {
     };
 
     fetchTotalContests();
-  }, [user]);
+  }, [isDemo,user]);
 
   // 🔄 Loading state
   if (loading) {

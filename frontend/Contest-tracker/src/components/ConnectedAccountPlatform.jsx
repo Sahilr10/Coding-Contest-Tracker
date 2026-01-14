@@ -5,6 +5,8 @@ import {
   getPlatformGradient,
   getPlatformBorderClass,
 } from "../utils/contestHelpers.js";
+import { useDemo } from "../context/DemoContext";
+import { demoRatingProgress, demoStats, demoUser } from "../demo/demoData";
 
 const ConnectedAccountPlatform = ({
   platform,
@@ -13,6 +15,8 @@ const ConnectedAccountPlatform = ({
 }) => {
   const gradientClass = getPlatformGradient(platform);
   const borderClass = getPlatformBorderClass(platform);
+
+  const { isDemo } = useDemo();
 
   const [showModal, setShowModal] = useState(false);
   const [username, setUsername] = useState("");
@@ -24,6 +28,13 @@ const ConnectedAccountPlatform = ({
   axios.defaults.baseURL = "/api/v1";
 
   const handleConnect = async () => {
+
+    if(isDemo){
+      setUsername(demoUser.username);
+      setShowModal(false);
+      return;
+    }
+
     if (!username.trim()) {
       setError("Username is required");
       return;

@@ -3,13 +3,23 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext";
+import { demoRatingProgress, demoStats } from "../demo/demoData";
 
 const AvgRating = ({ user }) => {
+  const { isDemo } = useDemo();
   const [rating, setRating] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+
+    if (isDemo) {
+      setRating(demoStats.averageRating);
+      setLoading(false);
+      return;
+    }
+
     if (!user?.connectedAccounts) {
       setLoading(false);
       return;
@@ -42,7 +52,7 @@ const AvgRating = ({ user }) => {
     };
 
     fetchAvgRating();
-  }, [user]);
+  }, [isDemo,user]);
 
   if (loading) {
     return <StatsCard label="Avg Rating" loading loader={<LoadingIndicatior/>} />;

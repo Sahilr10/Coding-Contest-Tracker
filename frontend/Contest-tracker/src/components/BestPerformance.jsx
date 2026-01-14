@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext";
+import { demoRatingProgress, demoStats } from "../demo/demoData";
 
 const BestPerformance = ({ user }) => {
+  const { isDemo } = useDemo();
   const [percentile, setPercentile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    if (isDemo) {
+      setPercentile(demoStats.bestPerformance);
+      setLoading(false);
+      return;
+    }
+
     if (!user) return;
 
     const fetchBestPerformance = async () => {
@@ -38,7 +48,7 @@ const BestPerformance = ({ user }) => {
     };
 
     fetchBestPerformance();
-  }, [user]);
+  }, [isDemo,user]);
 
   if (loading) {
     return <StatsCard label="Best Performance" loading loader={<LoadingIndicatior/>} />;

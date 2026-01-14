@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import StatsCard from "./StatsCard";
 import axios from "axios";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext";
+import { demoRatingProgress, demoStats } from "../demo/demoData";
 
 const BadgesEarned = ({ user }) => {
+  const { isDemo } = useDemo();
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    if (isDemo) {
+      setCount(demoStats.badges.total);
+      setLoading(false);
+      return;
+    }
+
     if (!user?.connectedAccounts) return;
 
     const fetchBadges = async () => {
@@ -31,7 +41,7 @@ const BadgesEarned = ({ user }) => {
     };
 
     fetchBadges();
-  }, [user]);
+  }, [isDemo,user]);
 
   if (loading) {
     return <StatsCard label="Badges Earned" loading loader={<LoadingIndicatior/>} />;

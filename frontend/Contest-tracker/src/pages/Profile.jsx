@@ -1,65 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import { X } from "lucide-react";
-import UserDetails from "../components/UserDetails";
-import Loader from "../components/Loader.jsx";
+import { useEffect, useState } from "react";
+import { useDemo } from "../context/DemoContext";
+import { demoUser } from "../demo/demoData";
+import ProfileTabs from "../components/ProfileTabs";
+import Loader from "../components/Loader";
 import axios from "axios";
-import ProfileTabs from "../components/ProfileTabs.jsx";
-import Home from "./Home.jsx"
+import { Navigate } from "react-router-dom";
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "/api/v1";
-
-function Profile() {
+const Profile = () => {
+  const { isDemo } = useDemo();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-
-  const navigate = useNavigate();
 
   useEffect(() => {
+    if (isDemo) {
+      console.log("🔥 DEMO MODE ACTIVE – using demo user");
+      setUser(demoUser);
+      setLoading(false);
+      return;
+    }
+
     const fetchUser = async () => {
       try {
-        const response = await axios.get("/users/me");
-        setUser(response.data.data); //  user stored here
+        const res = await axios.get("/api/v1/users/me", {
+          withCredentials: true,
+        });
+        setUser(res.data.data);
       } catch (err) {
-        setError("User not logged in");
+        console.error("User fetch failed", err);
       } finally {
-        setLoading(false); //  important
+        setLoading(false);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [isDemo]);
 
-  // Guard rendering
   if (loading) return <Loader />;
-  if (!user) return <Navigate to="/login" replace />;
+
+  if (!user && !isDemo) return <Navigate to="/login" />;
 
   return (
-    <div className="max-w-[80vw] mx-auto min-h-screen no-scrollbar">
-      <div className="flex justify-between text-3xl text-white mb-5 pt-8">
-        Profile
-        <button
-          className="hover:bg-white/20 p-2 rounded-full transition"
-          onClick={() => navigate("/")}
-        >
-          <X />
-        </button>
-      </div>
-      <div>
-      <UserDetails user={user} />
-      </div>
-
-      <div className="my-5  ">
-        <ProfileTabs user={user} />
-      </div>
-
-      
-
+    <div className="max-w-[80vw] mx-auto min-h-screen">
+      <ProfileTabs user={user} />
     </div>
   );
-}
+};
 
 export default Profile;

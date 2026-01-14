@@ -3,12 +3,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
+import { useDemo } from "../context/DemoContext.jsx";
+import { demoRatingProgress, demoStats } from "../demo/demoData.js";
 
 const ProblemsSolved = ({ user }) => {
+  const { isDemo } = useDemo();
   const [count, setCount] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    if (isDemo) {
+    setCount(demoStats.problemsSolved.total);
+    setLoading(false);
+    return;
+  }
+
     const leetcodeUsername =
       user?.connectedAccounts?.leetcode?.username;
 
@@ -36,7 +46,7 @@ const ProblemsSolved = ({ user }) => {
     };
 
     fetchSolved();
-  }, [user]);
+  }, [isDemo,user]);
 
   if (loading) {
     return <StatsCard label="Problems Solved" loading loader={<LoadingIndicatior/>} />;

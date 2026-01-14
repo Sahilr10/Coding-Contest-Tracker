@@ -10,6 +10,7 @@ import './index.css'
 import App from './App.jsx'
 import NotFound from './pages/NotFound.jsx'
 import ContestContextProvider from './context/ContestContextProvider.jsx'
+import { DemoProvider } from './context/DemoContext.jsx'
 
 
 const router = createBrowserRouter([
@@ -44,9 +45,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ContestContextProvider>
+      <DemoProvider>
       
         <RouterProvider router={router}/>
-      
+
+        </DemoProvider>
     </ContestContextProvider>
   </StrictMode>,
 )

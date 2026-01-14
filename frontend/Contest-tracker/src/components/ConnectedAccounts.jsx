@@ -1,7 +1,14 @@
 import React from 'react'
 import ConnectedAccountPlatform from './ConnectedAccountPlatform.jsx'
+import { useDemo } from "../context/DemoContext.jsx";
+import { demoRatingProgress } from "../demo/demoData";
 
 const ConnectedAccounts = ({user, fetchUser}) => {
+  const { isDemo } = useDemo();
+
+  const isConnected = isDemo
+  ? true
+  : !!user.connectedAccounts?.codeforces;
 
   return (
     <div className='grid grid-cols-1  gap-6 mt-6'>

@@ -14,7 +14,7 @@ const Home = () => {
   const { contests, loading, error } = useContext(ContestContext);
 
   if (loading) return <div className="flex items-center justify-center translate-x-0 translate-y-0 min-h-screen w-full"><Loader className="scale-150" /></div>;
-  if (error) return <p className="text-red-400">{error}</p>;
+  if (error) return <p className="h-screen text-gray-400 text-lg font-semibold flex justify-center items-center ">{error}</p>;
 
 
   return (

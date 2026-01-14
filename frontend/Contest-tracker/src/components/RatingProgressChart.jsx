@@ -9,12 +9,22 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { useDemo } from "../context/DemoContext.jsx";
+import { demoRatingProgress } from "../demo/demoData.js";
 
 const RatingProgressChart = ({ user }) => {
+  const { isDemo } = useDemo();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    if (isDemo) {
+    setData(demoRatingProgress);
+    setLoading(false);
+    return;
+    }
+
     if (!user) {
       setLoading(false);
       return;
@@ -49,7 +59,7 @@ const RatingProgressChart = ({ user }) => {
     };
 
     fetchData();
-  }, [user]);
+  }, [isDemo,user]);
 
   if (loading) {
     return (
