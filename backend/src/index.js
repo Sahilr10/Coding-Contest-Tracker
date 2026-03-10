@@ -4,8 +4,7 @@ import connectDB from './db/index.js';
 import { app } from './app.js';
 import { startReminders } from './utils/reminder.utils.js';
 
-// Start the reminder service
-startReminders();
+
 
 dotenv.config({
     path: './.env'

@@ -29,7 +29,7 @@ const Header = () => {
             <Trophy />
           </div>
           <div className="text-white font-semibold text-xl">
-            Contestly
+            <Link to="/">Contestly</Link>
           </div>
         </div>
 
