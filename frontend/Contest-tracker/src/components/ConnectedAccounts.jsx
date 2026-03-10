@@ -1,7 +1,7 @@
 import React from 'react'
 import ConnectedAccountPlatform from './ConnectedAccountPlatform.jsx'
 import { useDemo } from "../context/DemoContext.jsx";
-import { demoRatingProgress } from "../demo/demoData";
+import { demoRatingProgress } from "../demo/DemoData.js";
 
 const ConnectedAccounts = ({user, fetchUser}) => {
   const { isDemo } = useDemo();

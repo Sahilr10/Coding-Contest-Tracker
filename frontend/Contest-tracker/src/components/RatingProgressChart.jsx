@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { useDemo } from "../context/DemoContext.jsx";
-import { demoRatingProgress } from "../demo/demoData.js";
+import { demoRatingProgress } from "../demo/DemoData.js";
 
 const RatingProgressChart = ({ user }) => {
   const { isDemo } = useDemo();

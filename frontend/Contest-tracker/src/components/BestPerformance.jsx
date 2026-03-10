@@ -4,7 +4,7 @@ import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
 import { useDemo } from "../context/DemoContext";
-import { demoRatingProgress, demoStats } from "../demo/demoData";
+import { demoRatingProgress, demoStats } from "../demo/DemoData";
 
 const BestPerformance = ({ user }) => {
   const { isDemo } = useDemo();
