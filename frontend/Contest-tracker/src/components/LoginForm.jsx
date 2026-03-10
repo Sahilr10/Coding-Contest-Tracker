@@ -1,10 +1,11 @@
 import { User, Lock } from "lucide-react";
 
 const LoginForm = ({
+  isRegister = false,
   formData,
   handleChange,
   handleSubmit,
-  onSignup,
+  onToggleMode,
   onForgotPassword,
   loading,
   error,
@@ -27,7 +28,7 @@ const LoginForm = ({
       >
         {/* Heading */}
         <h2 className="text-center text-xl font-semibold text-white mb-4">
-          Login
+          {isRegister ? 'Register' : 'Login'}
         </h2>
 
         {/* Email */}
@@ -96,12 +97,12 @@ const LoginForm = ({
               transition disabled:opacity-50
             "
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? (isRegister ? 'Signing up...' : 'Logging in...') : (isRegister ? 'Sign Up' : 'Login')}
           </button>
 
           <button
             type="button"
-            onClick={onSignup}
+            onClick={onToggleMode}
             className="
               px-6 py-2 rounded-lg
               bg-white/10
@@ -110,7 +111,7 @@ const LoginForm = ({
               transition
             "
           >
-            Sign Up
+            {isRegister ? 'Go to Login' : 'Sign Up'}
           </button>
         </div>
 

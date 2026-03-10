@@ -32,8 +32,10 @@ function Register() {
         },
         body: JSON.stringify(formData)
       });
+      console.log(response);
 
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         navigate('/login'); // Redirect to login after successful registration
@@ -48,7 +50,7 @@ function Register() {
   };
 
   return (
-    <Login
+    <LoginForm
       isRegister={true}
       formData={formData}
       handleChange={handleChange}

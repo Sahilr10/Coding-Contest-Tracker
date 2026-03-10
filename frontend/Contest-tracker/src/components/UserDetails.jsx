@@ -1,6 +1,7 @@
 import React from 'react'
 import avatar from './../assets/avatar.svg'
 import { Pencil, SquarePen, Mail, Calendar,MapPin } from 'lucide-react'
+import { demoUser } from './Demo/tempData'
 
 const UserDetails = (props) => {
   console.log(props)
