@@ -4,7 +4,7 @@ import axios from "axios";
 import StatsCard from "./StatsCard";
 import LoadingIndicatior from "./LoadingIndicatior";
 import { useDemo } from "../context/DemoContext.jsx";
-import { demoStats } from "../Demo/demoData.js";
+import { demoStats } from "../Demo/tempData.js";
 
 
 const TotalContests = ({ user }) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDemo } from "../context/DemoContext";
-import { demoUser } from "../Demo/demoData";
+import { demoUser } from "../Demo/tempData";
 import ProfileTabs from "../components/ProfileTabs";
 import Loader from "../components/Loader";
 import axios from "axios";

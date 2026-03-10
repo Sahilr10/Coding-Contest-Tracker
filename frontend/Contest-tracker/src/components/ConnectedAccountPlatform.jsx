@@ -6,7 +6,7 @@ import {
   getPlatformBorderClass,
 } from "../utils/contestHelpers.js";
 import { useDemo } from "../context/DemoContext";
-import { demoRatingProgress, demoStats, demoUser } from "../Demo/demoData.js";
+import { demoRatingProgress, demoStats, demoUser } from "../Demo/tempData.js";
 
 const ConnectedAccountPlatform = ({
   platform,
