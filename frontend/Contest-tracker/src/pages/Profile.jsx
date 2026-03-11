@@ -5,6 +5,7 @@ import ProfileTabs from "../components/ProfileTabs";
 import Loader from "../components/Loader";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import UserDetails from "../components/UserDetails";
 
 const Profile = () => {
   const { isDemo } = useDemo();
@@ -40,7 +41,11 @@ const Profile = () => {
   if (!user && !isDemo) return <Navigate to="/login" />;
 
   return (
+    
     <div className="max-w-[80vw] mx-auto min-h-screen">
+      <div className="my-8">
+        <UserDetails user={user} />
+      </div>
       <ProfileTabs user={user} />
     </div>
   );
