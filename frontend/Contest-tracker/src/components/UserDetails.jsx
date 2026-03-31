@@ -15,7 +15,7 @@ const UserDetails = (props) => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get('/api/v1/users/me', {
+        const res = await axios.get('/users/me', {
           withCredentials: true,
         })
         if (res.data?.data) {

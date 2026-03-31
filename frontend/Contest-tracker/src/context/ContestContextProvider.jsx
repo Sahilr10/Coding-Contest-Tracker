@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ContestContext from "./ContestContext";
+import { getApiBaseURL } from "../utils/axiosConfig.js";
 
 const ContestContextProvider = ({ children }) => {
   const [contests, setContests] = useState([]);
@@ -10,8 +11,10 @@ const ContestContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const res = await fetch("https://coding-contest-tracker-backend.onrender.com/api/v1/contests/all"); 
-        
+        const apiUrl = getApiBaseURL();
+        const res = await fetch(`${apiUrl}/contests/all`, {
+          credentials: 'include'
+        });
 
         if (!res.ok) throw new Error("Failed to fetch contests");
 
