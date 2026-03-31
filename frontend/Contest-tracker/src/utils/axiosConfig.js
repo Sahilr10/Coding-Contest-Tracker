@@ -7,14 +7,20 @@ export const getApiBaseURL = () => {
     return '/api/v1';
   }
   
-  // In production: use environment variable
-  const apiUrl = import.meta.env.VITE_API_URL;
+  // In production: try multiple sources for API URL
+  // 1. Check Vite environment variable
+  let apiUrl = import.meta.env.VITE_API_URL;
   if (apiUrl) {
     return apiUrl;
   }
   
-  // Fallback: assume backend is on same domain
-  return '/api/v1';
+  // 2. Check window variable set by deployment
+  if (window.__VITE_API_URL__) {
+    return window.__VITE_API_URL__;
+  }
+  
+  // 3. Default to backend domain (most reliable)
+  return 'https://coding-contest-tracker-backend.onrender.com/api/v1';
 };
 
 // Set default base URL
