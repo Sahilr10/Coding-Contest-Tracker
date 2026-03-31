@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom'; 
-import LoginForm from '../components/LoginForm.jsx'; 
-import { getApiBaseURL } from '../utils/axiosConfig.js';
+import LoginForm from '../components/LoginForm.jsx';
+import axios from '../utils/axiosConfig.js';
 
 function Login() { 
   const [formData, setFormData] = useState({ email: '', password: '' }); 
@@ -17,23 +17,15 @@ function Login() {
     setError(''); 
     setLoading(true); 
     try { 
-      const apiUrl = getApiBaseURL();
-      const loginUrl = `${apiUrl}/users/login`;
-      const response = await fetch(loginUrl, { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify(formData), 
-        credentials: 'include' 
-      }); 
-      const data = await response.json(); 
-      if (response.ok) { 
+      const response = await axios.post('/api/v1/users/login', formData);
+      if (response.data.success || response.status === 200) { 
         navigate('/profile'); 
       } else { 
-        setError(data.message || 'Login failed');
+        setError(response.data.message || 'Login failed');
       } 
     } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
       console.error('Login error:', err);
-      setError(err.message || 'Network error. Please try again.');
     } finally { 
       setLoading(false); 
     } 

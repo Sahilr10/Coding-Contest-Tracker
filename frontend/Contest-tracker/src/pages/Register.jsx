@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm.jsx';
-import { getApiBaseURL } from '../utils/axiosConfig.js';
+import axios from '../utils/axiosConfig.js';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -26,29 +26,15 @@ function Register() {
     setLoading(true);
 
     try {
-      const apiUrl = getApiBaseURL();
-      const registerUrl = `${apiUrl}/users/register`;
-      const response = await fetch(registerUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include'
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Registration successful
+      const response = await axios.post('/api/v1/users/register', formData);
+      if (response.data.success || response.status === 201) {
         navigate('/login');
       } else {
-        // Server returned error
-        setError(data.message || 'Registration failed');
+        setError(response.data.message || 'Registration failed');
       }
     } catch (err) {
-      console.error('Registration error:', err);
-      setError(err.message || 'Network error. Please try again.');
+      setError(err.response?.data?.message || 'Registration failed');
+      console.error('Register error:', err);
     } finally {
       setLoading(false);
     }

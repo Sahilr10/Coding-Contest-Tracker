@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ContestContext from "./ContestContext";
-import { getApiBaseURL } from "../utils/axiosConfig.js";
 
 const ContestContextProvider = ({ children }) => {
   const [contests, setContests] = useState([]);
@@ -11,8 +10,7 @@ const ContestContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const apiUrl = getApiBaseURL();
-        const res = await fetch(`${apiUrl}/contests/all`, {
+        const res = await fetch("/api/v1/contests/all", {
           credentials: 'include'
         });
 
