@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm.jsx';
+import { getApiBaseURL } from '../utils/axiosConfig.js';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -25,7 +26,9 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/v1/users/register', {
+      const apiUrl = getApiBaseURL();
+      const registerUrl = `${apiUrl}/users/register`;
+      const response = await fetch(registerUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -38,7 +41,7 @@ function Register() {
       console.log(data);
 
       if (response.ok) {
-        navigate('/login'); // Redirect to login after successful registration
+        navigate('/login');
       } else {
         setError(data.message || 'Registration failed');
       }

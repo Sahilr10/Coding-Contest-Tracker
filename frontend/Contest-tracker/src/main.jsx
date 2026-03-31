@@ -6,6 +6,7 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Profile from './pages/Profile.jsx'
 
+import './utils/axiosConfig.js' // Configure axios for API calls
 import './index.css'
 import App from './App.jsx'
 import NotFound from './pages/NotFound.jsx'
