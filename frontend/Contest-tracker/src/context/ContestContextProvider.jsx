@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ContestContext from "./ContestContext";
+import axios from "../utils/axiosConfig.js";
 
 const ContestContextProvider = ({ children }) => {
   const [contests, setContests] = useState([]);
@@ -10,14 +11,9 @@ const ContestContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const res = await fetch("/api/v1/contests/all", {
-          credentials: 'include'
-        });
+        const res = await axios.get("/api/v1/contests/all");
 
-        if (!res.ok) throw new Error("Failed to fetch contests");
-
-        const json = await res.json();
-        setContests(json.data.contests);
+        setContests(res.data.data.contests);
       } catch (err) {
         setError(err.message);
       } finally {

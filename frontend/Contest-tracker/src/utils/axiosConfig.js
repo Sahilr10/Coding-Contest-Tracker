@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-// Simple axios setup - works with Vite proxy in dev, relative paths in production
+// In development: use relative paths (Vite proxy handles routing)
+// In production: use actual backend URL
+if (import.meta.env.PROD) {
+  axios.defaults.baseURL = 'https://coding-contest-tracker-backend.onrender.com';
+}
+
 axios.defaults.withCredentials = true;
 
 export default axios;
