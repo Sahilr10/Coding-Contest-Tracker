@@ -33,20 +33,22 @@ function Register() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       });
-      console.log(response);
 
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
+        // Registration successful
         navigate('/login');
       } else {
+        // Server returned error
         setError(data.message || 'Registration failed');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      console.error('Registration error:', err);
+      setError(err.message || 'Network error. Please try again.');
     } finally {
       setLoading(false);
     }

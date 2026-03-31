@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     return res
     .status(201) 
-    .json(new ApiResponse(200, createdUser, 'User created successfully'))
+    .json(new ApiResponse(201, 'User created successfully', createdUser))
 })
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -94,12 +94,12 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(
         new ApiResponse(
             200,
+            'User logged in successfully',
             {
                 user: loggedInUser,
                 accessToken,
                 refreshToken
-            },
-             'User logged in successfully'
+            }
         ))
 })
 
@@ -182,11 +182,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 200,
+                'Access token refreshed successfully',
                 {
                     accessToken,
                     refreshToken : newRefreshToken
-                },
-                 'Access token refreshed successfully'
+                }
             ))
     
     } catch (error) {
@@ -198,7 +198,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res
     .status(200)
-    .json(new ApiResponse(200, 'User fetched successfully',req.user,))
+    .json(new ApiResponse(200, 'User fetched successfully', req.user))
 })
 
 

@@ -32,7 +32,8 @@ function Login() {
         setError(data.message || 'Login failed');
       } 
     } catch (err) {
-      setError('Network error. Please try again.');
+      console.error('Login error:', err);
+      setError(err.message || 'Network error. Please try again.');
     } finally { 
       setLoading(false); 
     } 
