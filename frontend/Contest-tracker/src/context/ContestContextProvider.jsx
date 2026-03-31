@@ -11,7 +11,7 @@ const ContestContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const res = await axios.get("https://coding-contest-tracker-frontend.onrender.com/api/v1/contests/all");
+        const res = await axios.get("https://coding-contest-tracker-backend.onrender.com/api/v1/contests/all");
 
         setContests(res.data.data.contests);
       } catch (err) {
